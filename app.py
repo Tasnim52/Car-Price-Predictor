@@ -49,13 +49,14 @@ st.markdown("""
 @st.cache_resource
 def load_assets():
     try:
+        # These names must match your uploaded files on GitHub exactly
         with open('car_price_models.pkl', 'rb') as f:
             models = pickle.load(f)
         with open('ui_data.pkl', 'rb') as f:
             ui = pickle.load(f)
         return models, ui
     except FileNotFoundError:
-        st.error("Model files not found! Please run train_model.py first.")
+        st.error("Model files not found! Ensure car_price_models.pkl and ui_data.pkl are in your GitHub repository.")
         return None, None
 
 
@@ -85,7 +86,6 @@ if models and ui:
         st.subheader("📋 Car Specifications")
 
         brand = st.selectbox("Select Brand", ui['brands'])
-        # Filter models based on brand could be added here, but using full list for now
         model_name = st.selectbox("Select Model", ui['models'])
 
         year = st.slider("Registration Year", 2015, 2026, 2022)
@@ -105,8 +105,9 @@ if models and ui:
 
     with col2:
         st.subheader("📷 Vehicle Preview")
-        # Dynamic Image based on Brand
-        st.image(brand_images.get(brand, default_img), use_container_width=True,
+        
+        # FIXED LINE: Changed use_container_width to width=700 for stability
+        st.image(brand_images.get(brand, default_img), width=700,
                  caption=f"Typical {brand} configuration")
 
         st.write(" ")  # Spacing
